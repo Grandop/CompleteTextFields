@@ -12,13 +12,19 @@ import { useForm, Controller, FieldValues } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup';
 
-const schema = yup.object({
+interface FormValues {
+  username: string;
+  email: string;
+  password: string;
+  url: string;
+}
+
+const schema = yup.object<FormValues>({
   username: yup.string().required('informe seu username'),
   email: yup.string().email('email invalido').required('informe seu email'),
   password: yup.string().min(6,'a senha deve ter pelo menos 6 dígitos').required('digite sua senha'),
   url: yup.string().url('digite url válida').required('digite um url')
 })
-
 
 export default function App() {
   const { control, handleSubmit, formState: {errors} } = useForm({
@@ -106,7 +112,7 @@ export default function App() {
 
         <Controller
           control={control}
-          name="url"
+          name='url'
           render={({ field: {onChange, onBlur, value} }) => (
             <TextInput
             style={[
@@ -126,7 +132,6 @@ export default function App() {
           <Text style={styles.labelError}>{errors.url?.message}</Text>
         )}
         
-
         <TouchableOpacity
         style={styles.button}
         onPress={handleSubmit(handleSignIn)}
